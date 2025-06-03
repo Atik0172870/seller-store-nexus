@@ -61,7 +61,7 @@ const ProductManagement = () => {
     category: '',
     price: '',
     stock: '',
-    status: 'draft' as const
+    status: 'draft' as 'active' | 'inactive' | 'draft'
   });
 
   const filteredProducts = products.filter(product =>
