@@ -181,15 +181,15 @@ const FraudDetection = () => {
                   <span className="text-sm text-green-600">97.7%</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-green-600 h-2 rounded-full" style={{width: '97.7%'}}></div>
+                  <div className="bg-green-600 h-2 rounded-full w-[97.7%]"></div>
                 </div>
 
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-medium">Response Time</span>
-                  <span className="text-sm text-blue-600">< 100ms</span>
+                  <span className="text-sm text-blue-600">&lt; 100ms</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-blue-600 h-2 rounded-full" style={{width: '95%'}}></div>
+                  <div className="bg-blue-600 h-2 rounded-full w-[95%]"></div>
                 </div>
 
                 <div className="flex justify-between items-center">
@@ -197,7 +197,7 @@ const FraudDetection = () => {
                   <span className="text-sm text-yellow-600">2.3%</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-yellow-600 h-2 rounded-full" style={{width: '23%'}}></div>
+                  <div className="bg-yellow-600 h-2 rounded-full w-[23%]"></div>
                 </div>
               </div>
             </CardContent>
