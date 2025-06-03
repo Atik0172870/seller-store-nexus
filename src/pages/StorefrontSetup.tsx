@@ -1,341 +1,362 @@
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useAuth } from '@/contexts/AuthContext';
-import { Store, Palette, Upload, Eye, Save } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
+import { Store, Upload, Eye, Save } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const StorefrontSetup = () => {
-  const { user } = useAuth();
-  const navigate = useNavigate();
   const { toast } = useToast();
-  
   const [storeData, setStoreData] = useState({
-    storeName: '',
-    storeDescription: '',
-    storeSlogan: '',
-    storeUrl: '',
-    bannerImage: '',
-    logoImage: '',
-    primaryColor: '#8B5CF6',
-    secondaryColor: '#3B82F6',
-    aboutUs: '',
-    returnPolicy: '',
-    shippingPolicy: '',
-    contactEmail: '',
-    contactPhone: '',
-    businessAddress: ''
+    storeName: 'My Awesome Store',
+    storeDescription: 'Welcome to our amazing store! We offer high-quality products at competitive prices.',
+    storeSlogan: 'Quality you can trust',
+    contactEmail: 'contact@mystore.com',
+    contactPhone: '+1 (555) 123-4567',
+    address: '123 Main Street, City, State 12345',
+    businessLicense: 'BL-123456789',
+    taxId: 'TAX-987654321',
+    returnPolicy: 'We offer 30-day returns on all items in original condition.',
+    shippingPolicy: 'Free shipping on orders over $50. Standard delivery takes 3-5 business days.',
+    privacyPolicy: 'We respect your privacy and protect your personal information.'
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setStoreData({ ...storeData, [e.target.name]: e.target.value });
+  const [socialMedia, setSocialMedia] = useState({
+    facebook: 'https://facebook.com/mystore',
+    instagram: 'https://instagram.com/mystore',
+    twitter: 'https://twitter.com/mystore',
+    youtube: 'https://youtube.com/mystore'
+  });
+
+  const [brandColors, setBrandColors] = useState({
+    primary: '#7c3aed',
+    secondary: '#2563eb',
+    accent: '#059669'
+  });
+
+  const handleSave = () => {
+    toast({
+      title: "Storefront saved",
+      description: "Your storefront settings have been updated successfully.",
+    });
   };
 
-  const handleColorChange = (colorType: string, color: string) => {
-    setStoreData({ ...storeData, [colorType]: color });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Validate required fields
-    if (!storeData.storeName || !storeData.storeDescription || !storeData.storeUrl) {
-      toast({
-        title: "Missing required fields",
-        description: "Please fill in all required fields.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    // Mock save - in real app, this would send to API
-    try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      toast({
-        title: "Storefront saved successfully!",
-        description: "Your store is now live and ready for customers.",
-      });
-      
-      navigate('/seller-dashboard');
-    } catch (error) {
-      toast({
-        title: "Failed to save storefront",
-        description: "Please try again later.",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const generateStoreUrl = () => {
-    const baseUrl = storeData.storeName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-    setStoreData({ ...storeData, storeUrl: baseUrl });
+  const handlePreview = () => {
+    toast({
+      title: "Preview opening",
+      description: "Opening storefront preview in a new window...",
+    });
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
       <Navbar />
       
-      <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">
-            Setup Your Storefront
-          </h1>
-          <p className="text-gray-600">
-            Customize your store to reflect your brand and attract customers.
-          </p>
+      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800">Storefront Setup</h1>
+            <p className="text-gray-600">Customize your online store</p>
+          </div>
+          <div className="flex space-x-2">
+            <Button variant="outline" onClick={handlePreview}>
+              <Eye className="h-4 w-4 mr-2" />
+              Preview
+            </Button>
+            <Button onClick={handleSave} className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
+              <Save className="h-4 w-4 mr-2" />
+              Save Changes
+            </Button>
+          </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Store Basics */}
+        <div className="grid lg:grid-cols-2 gap-8">
+          {/* Basic Information */}
           <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Store className="h-5 w-5 mr-2" />
-                Store Information
+                Basic Information
               </CardTitle>
-              <CardDescription>Basic information about your store</CardDescription>
+              <CardDescription>Set up your store's basic details</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="storeName">Store Name *</Label>
-                  <Input
-                    id="storeName"
-                    name="storeName"
-                    placeholder="My Awesome Store"
-                    value={storeData.storeName}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="storeUrl">Store URL *</Label>
-                  <div className="flex">
-                    <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
-                      amarproduct.com/
-                    </span>
-                    <Input
-                      id="storeUrl"
-                      name="storeUrl"
-                      placeholder="my-store"
-                      value={storeData.storeUrl}
-                      onChange={handleInputChange}
-                      className="rounded-l-none"
-                      required
-                    />
-                    <Button
-                      type="button"
-                      onClick={generateStoreUrl}
-                      className="rounded-l-none"
-                      variant="outline"
-                    >
-                      Generate
-                    </Button>
-                  </div>
-                </div>
+              <div>
+                <Label htmlFor="storeName">Store Name</Label>
+                <Input
+                  id="storeName"
+                  value={storeData.storeName}
+                  onChange={(e) => setStoreData({ ...storeData, storeName: e.target.value })}
+                  placeholder="Enter your store name"
+                />
               </div>
-
-              <div className="space-y-2">
+              
+              <div>
                 <Label htmlFor="storeSlogan">Store Slogan</Label>
                 <Input
                   id="storeSlogan"
-                  name="storeSlogan"
-                  placeholder="Your catchy slogan here"
                   value={storeData.storeSlogan}
-                  onChange={handleInputChange}
+                  onChange={(e) => setStoreData({ ...storeData, storeSlogan: e.target.value })}
+                  placeholder="Your catchy slogan"
                 />
               </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="storeDescription">Store Description *</Label>
+              
+              <div>
+                <Label htmlFor="storeDescription">Store Description</Label>
                 <Textarea
                   id="storeDescription"
-                  name="storeDescription"
-                  placeholder="Describe what your store offers..."
                   value={storeData.storeDescription}
-                  onChange={handleInputChange}
-                  rows={3}
-                  required
+                  onChange={(e) => setStoreData({ ...storeData, storeDescription: e.target.value })}
+                  placeholder="Describe your store"
+                  rows={4}
                 />
               </div>
             </CardContent>
           </Card>
 
-          {/* Visual Branding */}
+          {/* Contact Information */}
           <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
             <CardHeader>
-              <CardTitle className="flex items-center">
-                <Palette className="h-5 w-5 mr-2" />
-                Visual Branding
-              </CardTitle>
-              <CardDescription>Customize your store's appearance</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {/* Colors */}
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="primaryColor">Primary Color</Label>
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="color"
-                      id="primaryColor"
-                      value={storeData.primaryColor}
-                      onChange={(e) => handleColorChange('primaryColor', e.target.value)}
-                      className="w-12 h-12 border border-gray-300 rounded-md cursor-pointer"
-                    />
-                    <Input
-                      value={storeData.primaryColor}
-                      onChange={(e) => handleColorChange('primaryColor', e.target.value)}
-                      className="flex-1"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="secondaryColor">Secondary Color</Label>
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="color"
-                      id="secondaryColor"
-                      value={storeData.secondaryColor}
-                      onChange={(e) => handleColorChange('secondaryColor', e.target.value)}
-                      className="w-12 h-12 border border-gray-300 rounded-md cursor-pointer"
-                    />
-                    <Input
-                      value={storeData.secondaryColor}
-                      onChange={(e) => handleColorChange('secondaryColor', e.target.value)}
-                      className="flex-1"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Image Uploads */}
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Store Logo</Label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                    <Upload className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-                    <p className="text-sm text-gray-600">Upload your store logo</p>
-                    <p className="text-xs text-gray-500">PNG, JPG up to 2MB</p>
-                    <Button type="button" variant="outline" className="mt-2">
-                      Choose File
-                    </Button>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label>Banner Image</Label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                    <Upload className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-                    <p className="text-sm text-gray-600">Upload banner image</p>
-                    <p className="text-xs text-gray-500">PNG, JPG up to 5MB</p>
-                    <Button type="button" variant="outline" className="mt-2">
-                      Choose File
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Store Policies */}
-          <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
-            <CardHeader>
-              <CardTitle>Store Policies & Contact</CardTitle>
-              <CardDescription>Important information for your customers</CardDescription>
+              <CardTitle>Contact Information</CardTitle>
+              <CardDescription>How customers can reach you</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="aboutUs">About Us</Label>
+              <div>
+                <Label htmlFor="contactEmail">Contact Email</Label>
+                <Input
+                  id="contactEmail"
+                  type="email"
+                  value={storeData.contactEmail}
+                  onChange={(e) => setStoreData({ ...storeData, contactEmail: e.target.value })}
+                  placeholder="contact@yourstore.com"
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="contactPhone">Phone Number</Label>
+                <Input
+                  id="contactPhone"
+                  value={storeData.contactPhone}
+                  onChange={(e) => setStoreData({ ...storeData, contactPhone: e.target.value })}
+                  placeholder="+1 (555) 123-4567"
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="address">Business Address</Label>
                 <Textarea
-                  id="aboutUs"
-                  name="aboutUs"
-                  placeholder="Tell customers about your business..."
-                  value={storeData.aboutUs}
-                  onChange={handleInputChange}
+                  id="address"
+                  value={storeData.address}
+                  onChange={(e) => setStoreData({ ...storeData, address: e.target.value })}
+                  placeholder="Your business address"
                   rows={3}
                 />
               </div>
+            </CardContent>
+          </Card>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="returnPolicy">Return Policy</Label>
-                  <Textarea
-                    id="returnPolicy"
-                    name="returnPolicy"
-                    placeholder="Describe your return policy..."
-                    value={storeData.returnPolicy}
-                    onChange={handleInputChange}
-                    rows={3}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="shippingPolicy">Shipping Policy</Label>
-                  <Textarea
-                    id="shippingPolicy"
-                    name="shippingPolicy"
-                    placeholder="Describe your shipping policy..."
-                    value={storeData.shippingPolicy}
-                    onChange={handleInputChange}
-                    rows={3}
-                  />
+          {/* Business Details */}
+          <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
+            <CardHeader>
+              <CardTitle>Business Details</CardTitle>
+              <CardDescription>Legal and tax information</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label htmlFor="businessLicense">Business License Number</Label>
+                <Input
+                  id="businessLicense"
+                  value={storeData.businessLicense}
+                  onChange={(e) => setStoreData({ ...storeData, businessLicense: e.target.value })}
+                  placeholder="BL-123456789"
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="taxId">Tax ID Number</Label>
+                <Input
+                  id="taxId"
+                  value={storeData.taxId}
+                  onChange={(e) => setStoreData({ ...storeData, taxId: e.target.value })}
+                  placeholder="TAX-987654321"
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Branding */}
+          <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
+            <CardHeader>
+              <CardTitle>Branding</CardTitle>
+              <CardDescription>Customize your store's appearance</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label>Store Logo</Label>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                  <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <Button variant="outline">
+                    <Upload className="h-4 w-4 mr-2" />
+                    Upload Logo
+                  </Button>
+                  <p className="text-sm text-gray-500 mt-2">Max size: 2MB, PNG/JPG</p>
                 </div>
               </div>
-
-              <div className="grid md:grid-cols-3 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="contactEmail">Contact Email</Label>
-                  <Input
-                    id="contactEmail"
-                    name="contactEmail"
-                    type="email"
-                    placeholder="contact@yourstore.com"
-                    value={storeData.contactEmail}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="contactPhone">Contact Phone</Label>
-                  <Input
-                    id="contactPhone"
-                    name="contactPhone"
-                    placeholder="+1 (555) 123-4567"
-                    value={storeData.contactPhone}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="businessAddress">Business Address</Label>
-                  <Input
-                    id="businessAddress"
-                    name="businessAddress"
-                    placeholder="123 Business St, City"
-                    value={storeData.businessAddress}
-                    onChange={handleInputChange}
-                  />
+              
+              <div>
+                <Label>Brand Colors</Label>
+                <div className="grid grid-cols-3 gap-4 mt-2">
+                  <div>
+                    <Label htmlFor="primary" className="text-sm">Primary</Label>
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="color"
+                        id="primary"
+                        value={brandColors.primary}
+                        onChange={(e) => setBrandColors({ ...brandColors, primary: e.target.value })}
+                        className="w-10 h-10 border border-gray-300 rounded"
+                      />
+                      <Input
+                        value={brandColors.primary}
+                        onChange={(e) => setBrandColors({ ...brandColors, primary: e.target.value })}
+                        className="text-sm"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <Label htmlFor="secondary" className="text-sm">Secondary</Label>
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="color"
+                        id="secondary"
+                        value={brandColors.secondary}
+                        onChange={(e) => setBrandColors({ ...brandColors, secondary: e.target.value })}
+                        className="w-10 h-10 border border-gray-300 rounded"
+                      />
+                      <Input
+                        value={brandColors.secondary}
+                        onChange={(e) => setBrandColors({ ...brandColors, secondary: e.target.value })}
+                        className="text-sm"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <Label htmlFor="accent" className="text-sm">Accent</Label>
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="color"
+                        id="accent"
+                        value={brandColors.accent}
+                        onChange={(e) => setBrandColors({ ...brandColors, accent: e.target.value })}
+                        className="w-10 h-10 border border-gray-300 rounded"
+                      />
+                      <Input
+                        value={brandColors.accent}
+                        onChange={(e) => setBrandColors({ ...brandColors, accent: e.target.value })}
+                        className="text-sm"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Preview and Actions */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-end">
-            <Button type="button" variant="outline" className="flex items-center">
-              <Eye className="h-4 w-4 mr-2" />
-              Preview Store
-            </Button>
-            <Button type="submit" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 flex items-center">
-              <Save className="h-4 w-4 mr-2" />
-              Save Storefront
-            </Button>
-          </div>
-        </form>
+          {/* Social Media */}
+          <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
+            <CardHeader>
+              <CardTitle>Social Media Links</CardTitle>
+              <CardDescription>Connect your social media accounts</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label htmlFor="facebook">Facebook</Label>
+                <Input
+                  id="facebook"
+                  value={socialMedia.facebook}
+                  onChange={(e) => setSocialMedia({ ...socialMedia, facebook: e.target.value })}
+                  placeholder="https://facebook.com/yourstore"
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="instagram">Instagram</Label>
+                <Input
+                  id="instagram"
+                  value={socialMedia.instagram}
+                  onChange={(e) => setSocialMedia({ ...socialMedia, instagram: e.target.value })}
+                  placeholder="https://instagram.com/yourstore"
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="twitter">Twitter</Label>
+                <Input
+                  id="twitter"
+                  value={socialMedia.twitter}
+                  onChange={(e) => setSocialMedia({ ...socialMedia, twitter: e.target.value })}
+                  placeholder="https://twitter.com/yourstore"
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="youtube">YouTube</Label>
+                <Input
+                  id="youtube"
+                  value={socialMedia.youtube}
+                  onChange={(e) => setSocialMedia({ ...socialMedia, youtube: e.target.value })}
+                  placeholder="https://youtube.com/yourstore"
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Policies */}
+          <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
+            <CardHeader>
+              <CardTitle>Store Policies</CardTitle>
+              <CardDescription>Define your store policies</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label htmlFor="returnPolicy">Return Policy</Label>
+                <Textarea
+                  id="returnPolicy"
+                  value={storeData.returnPolicy}
+                  onChange={(e) => setStoreData({ ...storeData, returnPolicy: e.target.value })}
+                  placeholder="Describe your return policy"
+                  rows={3}
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="shippingPolicy">Shipping Policy</Label>
+                <Textarea
+                  id="shippingPolicy"
+                  value={storeData.shippingPolicy}
+                  onChange={(e) => setStoreData({ ...storeData, shippingPolicy: e.target.value })}
+                  placeholder="Describe your shipping policy"
+                  rows={3}
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="privacyPolicy">Privacy Policy</Label>
+                <Textarea
+                  id="privacyPolicy"
+                  value={storeData.privacyPolicy}
+                  onChange={(e) => setStoreData({ ...storeData, privacyPolicy: e.target.value })}
+                  placeholder="Describe your privacy policy"
+                  rows={3}
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
